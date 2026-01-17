@@ -1,0 +1,39 @@
+{
+  "manifest_version": 3,
+  "name": "Janus",
+  "version": "1.0",
+  "description": "Chat with AI inside your favourite LLM without cluttering your context history.",
+  "permissions": [
+    "storage", 
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://gemini.google.com/*",
+    "https://chatgpt.com/*",
+    "https://deepseek.com/*",
+    "https://chat.deepseek.com/*"
+  ],
+  "optional_host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://gemini.google.com/*", 
+        "https://chatgpt.com/*",
+        "https://deepseek.com/*",
+        "https://chat.deepseek.com/*"
+      ],
+      "js": ["adapters.js", "markdown.js", "content.js"],
+      "css": ["styles.css"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
