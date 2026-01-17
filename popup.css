@@ -1,0 +1,265 @@
+body 
+{
+    width: 360px;
+    padding: 0;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f9f9f9;
+}
+
+.header 
+{
+    padding: 15px;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+h3 
+{
+    margin: 0 0 10px 0;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+.main-selector 
+{
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #6366f1;
+    border-radius: 6px;
+    font-weight: bold;
+    background: #fff;
+    cursor: pointer;
+}
+
+.main-selector:focus 
+{
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+.tabs 
+{
+    display: flex;
+    background: #e0e0e0;
+    padding: 2px;
+}
+
+.tab-btn 
+{
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #666;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active 
+{
+    background: #fff;
+    color: #6366f1;
+    border-bottom: 2px solid #6366f1;
+}
+
+.content-zone 
+{
+    padding: 15px;
+    display: none;
+}
+
+.content-zone.active 
+{
+    display: block;
+}
+
+.card 
+{
+    background: white;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 12px;
+    border: 1px solid #eee;
+}
+
+label 
+{
+    font-size: 12px;
+    font-weight: bold;
+    color: #555;
+    display: block;
+    margin-bottom: 6px;
+}
+
+input 
+{
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    font-family: monospace;
+}
+
+input:focus 
+{
+    border-color: #6366f1;
+    outline: none;
+}
+
+.advanced-toggle 
+{
+    font-size: 11px;
+    color: #6366f1;
+    cursor: pointer;
+    text-decoration: underline;
+    display: inline-block;
+    margin-bottom: 5px;
+    user-select: none;
+    margin-top: 5px;
+}
+
+.advanced-section 
+{
+    display: none;
+    padding-top: 8px;
+    border-top: 1px dashed #eee;
+}
+
+.advanced-section.visible 
+{
+    display: block;
+}
+
+.fetch-btn 
+{
+    padding: 5px 10px;
+    font-size: 11px;
+    background: #e0e7ff;
+    color: #4338ca;
+    width: auto;
+    margin-top: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-item 
+{
+    background: #f8fafc;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.custom-info 
+{
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.custom-name 
+{
+    font-weight: bold;
+    font-size: 13px;
+    color: #333;
+}
+
+.custom-meta 
+{
+    font-size: 10px;
+    color: #777;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.del-btn 
+{
+    background: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    cursor: pointer;
+    margin-left: 5px;
+}
+
+.primary-btn 
+{
+    width: 100%;
+    padding: 12px;
+    background: #222;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.primary-btn:hover 
+{
+    background: #444;
+}
+
+.secondary-btn 
+{
+    width: 100%;
+    padding: 8px;
+    background: #e0e7ff;
+    color: #4338ca;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+#addCustomForm 
+{
+    display: none;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.status 
+{
+    margin-top: 8px;
+    font-size: 12px;
+    text-align: center;
+    color: green;
+    opacity: 0;
+    transition: opacity 0.3s;
+    padding-bottom: 10px;
+}
+
+.note 
+{
+    font-size: 10px;
+    color: #888;
+    margin-top: 2px;
+}
+
+a 
+{
+    color: #6366f1;
+    text-decoration: none;
+}

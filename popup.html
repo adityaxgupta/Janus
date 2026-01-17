@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+
+    <div class="header">
+        <h3>Janus</h3>
+        <label>Active Brain</label>
+        <select id="activeProvider" class="main-selector">
+            <option value="gemini">Google Gemini</option>
+            <option value="openai">OpenAI</option>
+            <option value="deepseek">DeepSeek</option>
+            <option value="openrouter">OpenRouter (Universal)</option>
+        </select>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="viewStandard">Standard</button>
+        <button class="tab-btn" data-tab="viewCustom">Custom</button>
+    </div>
+
+    <div id="viewStandard" class="content-zone active">
+
+        <div class="card">
+            <label>Gemini Key</label>
+            <input type="password" id="geminiKey" placeholder="Paste yout API key from Google AI Studio">
+
+            <div class="advanced-toggle">Select Specific Model</div>
+            <div class="advanced-section">
+                <label>Active Model</label>
+                <select id="geminiModel">
+                    <option value="gemini-2.5-flash">gemini-2.5-flash (Default)</option>
+                </select>
+                <button id="fetchModelsBtn" class="fetch-btn">Refresh Model List</button>
+                <div id="modelStatus" style="font-size:10px; color:#666; margin-top:4px;"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <label>OpenAI Key</label>
+            <input type="password" id="openaiKey" placeholder="sk-...">
+        </div>
+
+        <div class="card">
+            <label>DeepSeek Key</label>
+            <input type="password" id="deepseekKey" placeholder="sk-...">
+        </div>
+
+        <div class="card">
+            <label>OpenRouter Key</label>
+            <input type="password" id="openrouterKey" placeholder="sk-or-v1-...">
+            <label style="margin-top:5px">Model ID</label>
+            <input type="text" id="openrouterModel" placeholder="xiaomi/mimo-v2-flash:free">
+            <div class="note">
+                Free models: <a href="https://openrouter.ai/models?q=free" target="_blank">Browse List</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewCustom" class="content-zone">
+        <div id="customListContainer">
+        </div>
+
+        <button id="showAddFormBtn" class="secondary-btn">+ Add Custom Connection</button>
+
+        <div id="addCustomForm">
+            <label>Name</label>
+            <input type="text" id="newCustomName" placeholder="e.g. My Groq or Ollama">
+
+            <label>API URL (OpenAI Format)</label>
+            <input type="text" id="newCustomUrl" placeholder="https://api.groq.com/openai/v1/chat/completions">
+
+            <label>API Key (Optional for Local)</label>
+            <input type="password" id="newCustomKey">
+
+            <label>Model Name</label>
+            <input type="text" id="newCustomModel" placeholder="Requires exact model name e.g. llama3-70b-8192">
+
+            <button id="addCustomBtn" class="primary-btn" style="background:#16a34a;">Test & Save Connection</button>
+        </div>
+    </div>
+
+    <div style="padding: 0 15px 15px 15px;">
+        <button id="saveBtn" class="primary-btn">Save Settings</button>
+        <div id="status" class="status">Settings Saved!</div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
