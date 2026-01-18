@@ -56,12 +56,12 @@ function getNormalizedEndpoint(userUrl) {
     let url = userUrl.trim().replace(/\/+$/, "");
     if (url.endsWith("/chat/completions")) return url;
     if (url.endsWith("/v1")) return `${url}/chat/completions`;
-    // if user enters base domain like api.groq.com, assume standard path
+    //if user enters base domain like api.groq.com, assume standard path
     return `${url}/v1/chat/completions`;
 }
 
 async function handleAddCustom() {
-    console.log("🚀 Starting Add Custom Process...");
+    console.log("Starting Add Custom Process...");
     
     const name = document.getElementById("newCustomName").value;
     const rawUrl = document.getElementById("newCustomUrl").value;
@@ -181,7 +181,7 @@ async function testCustomConnection(url, apiKey, modelName) {
         });
         clearTimeout(timeoutId);
 
-        console.log(`📥 Status: ${response.status} ${response.statusText}`);
+        console.log(`Status: ${response.status} ${response.statusText}`);
         
         //parse response text first to log it, then check JSON
         const rawText = await response.text();
@@ -309,7 +309,7 @@ function renderCustomList() {
         div.className = "custom-item";
         div.innerHTML = `
             <div class="custom-info">
-                <div class="custom-name">🔌 ${p.name}</div>
+                <div class="custom-name">${p.name}</div>
                 <div class="custom-meta" title="${p.url}">${p.model || "Default"}</div>
             </div>
             <button class="del-btn" data-id="${p.id}">Delete</button>
@@ -326,7 +326,7 @@ function updateDropdown(activeId) {
     customProviders.forEach(p => {
         const option = document.createElement("option");
         option.value = p.id;
-        option.text = `🔌 ${p.name}`;
+        option.text = `${p.name}`;
         select.add(option);
     });
 
