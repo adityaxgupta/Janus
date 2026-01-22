@@ -114,3 +114,81 @@ function createGhostButton() {
     btn.addEventListener("click", () => toggleGhostMode());
     document.body.appendChild(btn);
 }
+
+function saveGhostMessage(text, isUser) {
+    const chatId = getChatId();
+    if (chatId.includes("_home")) return; 
+
+    chrome.storage.local.get([chatId], (result) => {
+        let history = result[chatId] || [];
+        history.push({ text, isUser, timestamp: Date.now() });
+        chrome.storage.local.set({ [chatId]: history });
+    });
+}
+
+function restoreGhostMessages() {
+    const body = document.querySelector(".ghost-window-body");
+    if (body) body.innerHTML = "";
+    const chatId = getChatId();
+    currentChatId = chatId; 
+    
+    chrome.storage.local.get([chatId], (result) => {
+        const history = result[chatId];
+        if (history && history.length > 0) {
+            //we are passing false as 3rd argument so we dont save the previously saved texts with new ones
+            history.forEach(msg => injectGhostBubble(msg.text, msg.isUser, false));
+        }
+    });
+}
+
+function injectGhostBubble(text, isUser, shouldSave = true) {
+    const container = document.querySelector(".ghost-window-body");
+    if (!container) return;
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("ghost-message-container");
+    wrapper.style.alignItems = isUser ? "flex-end" : "flex-start";
+    
+    const label = document.createElement("div");
+    label.classList.add("ghost-label");
+    label.innerText = isUser ? "You" : "Ghost";
+    
+    const bubble = document.createElement("div");
+    bubble.classList.add("ghost-bubble");
+    bubble.classList.add(isUser ? "ghost-user" : "ghost-ai");
+    // if ai render text with markdown suport
+    if (!isUser && typeof SimpleMarkdown !== 'undefined') {
+        bubble.innerHTML = SimpleMarkdown.parse(text);
+    } else {
+        bubble.innerText = text;
+    }
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(bubble);
+    container.appendChild(wrapper);
+    
+    //auto scroll to bottom
+    container.scrollTop = container.scrollHeight;
+
+    if (shouldSave) saveGhostMessage(text, isUser);
+}
+
+function showLoading() {
+    const container = document.querySelector(".ghost-window-body");
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("ghost-message-container");
+    wrapper.id = "ghost-loading-indicator";
+    wrapper.style.alignItems = "flex-start";
+    wrapper.innerHTML = `
+        <div class="ghost-label">Thinking...</div>
+        <div class="ghost-loading-bubble">
+            <div class="ghost-dot"></div><div class="ghost-dot"></div><div class="ghost-dot"></div>
+        </div>`;
+    container.appendChild(wrapper);
+    container.scrollTop = container.scrollHeight;
+}
+
+function removeLoading() {
+    const loader = document.getElementById("ghost-loading-indicator");
+    if (loader) loader.remove();
+}
