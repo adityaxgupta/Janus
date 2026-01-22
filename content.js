@@ -192,3 +192,114 @@ function removeLoading() {
     const loader = document.getElementById("ghost-loading-indicator");
     if (loader) loader.remove();
 }
+
+function getCurrentAdapter() {
+    const h = window.location.hostname;
+    if(h.includes("gemini")) return ADAPTERS["gemini.google.com"];
+    if(h.includes("chatgpt")) return ADAPTERS["chatgpt.com"];
+    if(h.includes("deepseek")) return ADAPTERS["deepseek.com"];
+    return null;
+}
+
+function getChatInput() {
+    const adapter = getCurrentAdapter();
+    if (!adapter) return null;
+    for (const selector of adapter.inputBox) {
+        const el = document.querySelector(selector);
+        if (el) return el;
+    }
+    return null;
+}
+
+function scrapeContext() {
+    const adapter = getCurrentAdapter();
+    if (!adapter) return "";
+    
+    const bubbles = document.querySelectorAll(adapter.messageSelector);
+    
+    //scrape the last 15 messages, clean them up, and join them
+    return Array.from(bubbles).slice(-15).map(b => b.innerText.replace(/\n+/g, " ").trim()).join("\n---\n");
+}
+
+function setupInterceptor() {
+    document.body.addEventListener("keydown", (event) => {
+        if (isGhostMode && event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            event.stopPropagation();
+            if (isWaiting) return;
+
+            const inputBox = getChatInput();
+            if (inputBox) {
+                const stolenText = inputBox.innerText || inputBox.value;
+                if (!stolenText.trim()) return;
+
+                isWaiting = true;
+                const screenContext = scrapeContext(); 
+                
+                injectGhostBubble(stolenText, true);
+                inputBox.innerHTML = ""; 
+                showLoading();
+
+                chrome.storage.local.get(["activeProvider"], (result) => {
+                    const provider = result.activeProvider || "gemini";
+                    chrome.runtime.sendMessage(
+                        { 
+                            action: "fetchGhostReply", 
+                            prompt: stolenText, 
+                            context: screenContext, 
+                            provider: provider 
+                        }, 
+                        (response) => {
+                            removeLoading();
+                            isWaiting = false;
+                            if (response && response.success) {
+                                injectGhostBubble(response.data, false);
+                            } else {
+                                injectGhostBubble("Error: " + (response.error || "Unknown"), false);
+                            }
+                        }
+                    );
+                });
+            }
+        }
+    }, true);
+}
+
+function setupCopyListeners() {
+    //allows clicking copy to copy code blocks
+    document.addEventListener("click", (e) => {
+        if (e.target && e.target.classList.contains("ghost-copy-btn")) {
+            const btn = e.target;
+            const rawCode = decodeURIComponent(btn.getAttribute("data-code"));
+            
+            navigator.clipboard.writeText(rawCode).then(() => {
+                const original = btn.innerText;
+                btn.innerText = "Copied!";
+                btn.classList.add("copied");
+                setTimeout(() => {
+                    btn.innerText = original;
+                    btn.classList.remove("copied");
+                }, 2000);
+            });
+        }
+    });
+}
+
+function setupUrlObserver() {
+    setInterval(() => {
+        const newId = getChatId();
+        if (newId !== currentChatId) {
+            restoreGhostMessages();
+        }
+    }, 1000);
+}
+
+//init
+setTimeout(() => {
+    createGhostButton();
+    createFloatingWindow(); //creates the window on load(hidden)
+    setupInterceptor();
+    setupCopyListeners();
+    restoreGhostMessages(); 
+    setupUrlObserver();
+}, 1000);
